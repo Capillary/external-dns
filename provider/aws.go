@@ -168,6 +168,10 @@ func NewAWSProvider(awsConfig AWSConfig) (*AWSProvider, error) {
 		session.Config.WithCredentials(stscreds.NewCredentials(session, awsConfig.AssumeRole))
 	}
 
+	if *session.Config.Region == "cn-north-1" || *session.Config.Region == "cn-northwest-1" {
+    session.Config.WithEndpoint("api.route53.cn").WithRegion("cn-northwest-1")
+  }
+
 	provider := &AWSProvider{
 		client:               route53.New(session),
 		domainFilter:         awsConfig.DomainFilter,
